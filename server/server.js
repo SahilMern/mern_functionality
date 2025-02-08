@@ -18,4 +18,10 @@ app.use(cookieParser())
 import userRoutes from "./Routes/User.Routes.js";
 app.use("/api/v1", userRoutes);
 
+
+//TODO:- PRODUCTS ROUTES 
+import productRoutes from "./Routes/Products.routes.js"
+app.use("/api/v1", productRoutes);
 app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`));
+
+  
