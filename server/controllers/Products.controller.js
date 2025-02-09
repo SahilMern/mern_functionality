@@ -45,3 +45,40 @@ export const productRegister = async (req, res) => {
   }
 };
 
+
+export const productsdata = async(req, res) => {
+  try {
+    const data = await ProductModel.find({})
+    return  res.status(200).json({
+      message:"All products data", 
+      data
+    })
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "An error occurred",
+      error: error.message,
+    });
+  }
+}
+
+
+
+export const singleproductsdata = async(req, res) => {
+  try {
+    const productId = req.params.id;
+    console.log(productId, "productsId");
+    
+    const data = await ProductModel.find({_id:productId})
+    return  res.status(200).json({
+      message:"All products data", 
+      data
+    })
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "An error occurred",
+      error: error.message,
+    });
+  }
+}

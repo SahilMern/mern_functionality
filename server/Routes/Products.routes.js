@@ -1,8 +1,14 @@
 import express from "express";
 const router = express.Router();
-import { productRegister } from "../controllers/Products.controller.js";
+import { productRegister, productsdata, singleproductsdata } from "../controllers/Products.controller.js";
 
-// Register product API route
+//TODO:- Register product API route
 router.post("/productRegister", productRegister);
+
+//TODO:- GET Products Data
+router.get("/productsdata", productsdata);
+
+//TODO:- GET Single Products Data
+router.get("/productsdata/:id", singleproductsdata);
 
 export default router;
