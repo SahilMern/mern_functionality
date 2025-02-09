@@ -45,7 +45,7 @@ export const productRegister = async (req, res) => {
   }
 };
 
-
+//? GET PRODUCT DATA
 export const productsdata = async(req, res) => {
   try {
     const data = await ProductModel.find({})
@@ -62,12 +62,11 @@ export const productsdata = async(req, res) => {
   }
 }
 
-
-
+//? GET SINGLE PRODUCTS BY ID
 export const singleproductsdata = async(req, res) => {
   try {
     const productId = req.params.id;
-    console.log(productId, "productsId");
+    // console.log(productId, "productsId");
     
     const data = await ProductModel.find({_id:productId})
     return  res.status(200).json({
@@ -82,3 +81,4 @@ export const singleproductsdata = async(req, res) => {
     });
   }
 }
+
