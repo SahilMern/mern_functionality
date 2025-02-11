@@ -1,6 +1,7 @@
 import User from "../models/User.Model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+
 //TODO:- userRegister Api
 export const userRegster = async (req, res) => {
   try {
