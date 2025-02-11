@@ -27,4 +27,9 @@ app.use("/api/v1", userRoutes);
 //TODO:- PRODUCTS ROUTES
 import productRoutes from "./Routes/Products.routes.js";
 app.use("/api/v1/products", productRoutes);
+
+//TODO:- Cloudinary
+import Cloudinary from "./Routes/Cloudinary.Routes.js"
+app.use("/api/cloudinary", Cloudinary)
+
 app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`));
