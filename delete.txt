@@ -1,0 +1,183 @@
+
+
+// Dummy data (products collection)
+const products = [
+  { name: "Smartwatch", price: 199.99, category: "Electronics", stock: 200 },
+  { name: "Laptop", price: 899.99, category: "Electronics", stock: 50 },
+  { name: "Shirt", price: 29.99, category: "Clothing", stock: 500 },
+  { name: "Jeans", price: 49.99, category: "Clothing", stock: 150 },
+  { name: "Headphones", price: 49.99, category: "Audio", stock: 300 },
+  { name: "Monitor", price: 199.99, category: "Electronics", stock: 100 },
+  { name: "Tablet", price: 299.99, category: "Electronics", stock: 150 }
+];
+
+
+// 1) $and (Logical AND)
+// Matches documents that satisfy all conditions provided.
+const expensiveElectronics = await Product.find({
+  $and: [{ price: { $gt: 100 } }, { category: 'Electronics' }]
+});
+console.log("Expensive Electronics:", expensiveElectronics);
+// Output: Products that are in the Electronics category and have a price greater than 100.
+// [
+//   { name: "Smartwatch", price: 199.99, category: "Electronics", stock: 200 },
+//   { name: "Laptop", price: 899.99, category: "Electronics", stock: 50 },
+//   { name: "Tablet", price: 299.99, category: "Electronics", stock: 150 }
+// ]
+
+
+// 2) $or (Logical OR)
+// Matches documents that satisfy at least one of the specified conditions.
+const affordableOrElectronics = await Product.find({
+  $or: [{ price: { $lt: 50 } }, { category: 'Electronics' }]
+});
+console.log("Affordable or Electronics:", affordableOrElectronics);
+// Output: Products that are either affordable (price < 50) or in the Electronics category.
+// [
+//   { name: "Headphones", price: 49.99, category: "Audio", stock: 300 },
+//   { name: "Smartwatch", price: 199.99, category: "Electronics", stock: 200 },
+//   { name: "Laptop", price: 899.99, category: "Electronics", stock: 50 },
+//   { name: "Monitor", price: 199.99, category: "Electronics", stock: 100 },
+//   { name: "Tablet", price: 299.99, category: "Electronics", stock: 150 }
+// ]
+
+
+// 3) $not (Logical NOT)
+// Matches documents that do not satisfy the specified condition.
+const nonElectronicsProducts = await Product.find({
+  category: { $not: { $eq: 'Electronics' } }
+});
+console.log("Non-Electronics Products:", nonElectronicsProducts);
+// Output: Products that are not in the Electronics category.
+// [
+//   { name: "Shirt", price: 29.99, category: "Clothing", stock: 500 },
+//   { name: "Jeans", price: 49.99, category: "Clothing", stock: 150 },
+//   { name: "Headphones", price: 49.99, category: "Audio", stock: 300 }
+// ]
+
+
+// 4) $nor (Logical NOR)
+// Matches documents that do not satisfy any of the specified conditions.
+const neitherExpensiveNorElectronics = await Product.find({
+  $nor: [{ price: { $gt: 500 } }, { category: 'Electronics' }]
+});
+console.log("Neither Expensive Nor Electronics:", neitherExpensiveNorElectronics);
+// Output: Products that are neither expensive (price > 500) nor in the Electronics category.
+// [
+//   { name: "Shirt", price: 29.99, category: "Clothing", stock: 500 },
+//   { name: "Jeans", price: 49.99, category: "Clothing", stock: 150 },
+//   { name: "Headphones", price: 49.99, category: "Audio", stock: 300 }
+// ]
+
+--------------------------YE line logical operater ke neeche delete ki gaye hai-----------------
+
+
+
+// Dummy data (products collection with tags as an array)
+const products = [
+  { name: "Smartwatch", price: 199.99, category: "Electronics", stock: 200, tags: ["smart", "wearable"] },
+  { name: "Laptop", price: 899.99, category: "Electronics", stock: 50, tags: ["computer", "portable"] },
+  { name: "Shirt", price: 29.99, category: "Clothing", stock: 500, tags: [] }, // No tags
+  { name: "Jeans", price: 49.99, category: "Clothing", stock: 150, tags: ["denim"] },
+  { name: "Headphones", price: 49.99, category: "Audio", stock: 300, tags: ["audio", "music"] },
+  { name: "Monitor", price: 199.99, category: "Electronics", stock: 100, tags: ["display"] },
+  { name: "Tablet", price: 299.99, category: "Electronics", stock: 150, tags: ["portable", "screen"] }
+];
+
+
+// Query using $size
+const productsWithTwoTags = await Product.find({ tags: { $size: 2 } });
+console.log("Products with Exactly Two Tags:", productsWithTwoTags);
+// Output: Products that have exactly two elements in the tags array.
+// [
+//   { name: "Smartwatch", price: 199.99, category: "Electronics", stock: 200, tags: ["smart", "wearable"] },
+//   { name: "Laptop", price: 899.99, category: "Electronics", stock: 50, tags: ["computer", "portable"] }
+// ]
+
+
+// 1. Projection
+// Projection in MongoDB lets you choose which fields to show or hide in your query results.
+// The _id field is included by default unless you exclude it.
+// Purpose: To control what data you get back from your queries.
+.
+
+
+const projectionExample = await db.collection.find({}, { field1: 1, field2: 1 });
+// Output: Returns only field1 and field2 of each document, excluding all other fields.
+// [
+//   { field1: value1, field2: value2 },
+//   { field1: value3, field2: value4 },
+//   ...
+// ]
+
+
+// $all: Selects documents where a field is an array containing all specified elements.
+// Usage: To find documents that have an array field containing multiple specified values.
+const specificGenreBooks = await db.books.find({ genres: { $all: ["Science Fiction", "Mystery"] } });
+// Output: Returns documents with genres containing both "Science Fiction" and "Mystery".
+// [
+//   { title: "Dune", genres: ["Science Fiction", "Adventure"] },
+//   ...
+// ]
+
+
+// $elemMatch: Matches documents that contain an array field with at least one element
+// matching all specified query criteria.
+// Usage: To filter documents based on criteria of array elements.
+const mathHighScorers = await db.students.find({ grades: { $elemMatch: { subject: "Math", score: { $gt: 90 } } } });
+// Output: Returns students who scored more than 90 in Math.
+// [
+//   { name: "Alice", grades: [/*...*/] },
+//   { name: "Charlie", grades: [/*...*/] },
+//   ...
+// ]
+
+
+// 2. Update Operations
+// findOneAndUpdate: Modifies a single document and returns the updated document.
+// Usage: To update specific fields in a document and optionally return the updated document.
+const updatedProduct = await db.collectionName.findOneAndUpdate(
+  { filter },
+  { $set: { existingField: newValue, newField: "new value" } },
+  { returnOriginal: false }
+);
+// Output: Returns the updated document.
+// { existingField: newValue, newField: "new value", ... }
+
+
+// updateOne: Modifies a single document matching the specified filter.
+// Usage: To update specific fields of one document in a collection.
+await db.collectionName.updateOne(
+  { filter },
+  { $set: { existingField: newValue, newField: "new value" } }
+);
+// Output: Modifies the first document matching the filter criteria.
+
+
+// updateMany: Modifies all documents matching the specified filter.
+// Usage: To update multiple documents in a collection.
+await db.collectionName.updateMany(
+  { filter },
+  { $set: { existingField: newValue } }
+);
+// Output: Modifies all documents matching the filter criteria.
+
+
+// $unset: Deletes a specified field from a document.
+// Usage: To remove a field from a document.
+await db.collectionName.updateOne(
+  { filter },
+  { $unset: { fieldName: "" } }
+);
+// Output: The specified field is removed from the document.
+
+
+// $rename: Renames an existing field in a document.
+// Usage: To change the name of a field in a document.
+await db.collection.updateOne(
+  { /* filter criteria */ },
+  { $rename: { "oldFieldName": "newFieldName" } }
+);
+// Output: The field "oldFieldName" is renamed to "newFieldName".
+
+--------------Ye element operater ke nech delete ki gaye -----------------------
