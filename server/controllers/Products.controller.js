@@ -47,12 +47,44 @@ export const productRegister = async (req, res) => {
 //? GET PRODUCT DATA
 export const productsdata = async (req, res) => {
   try {
-    console.log("I am Hitted");
+    const { search, limit = 1, page = 1 } = req.query;
+    console.log(search, "search");
+    console.log(limit, "limit");
 
-    const data = await ProductModel.find({});
+    let query = {};
+    if (search) {
+      query.productId = {
+        $regex: search,
+        $options: "i",  // Case-insensitive search
+      };
+    }
+
+    let limitNumber = parseInt(limit, 10);
+    let pageNumber = parseInt(page, 10);
+    console.log(limitNumber, pageNumber, "datalimit");
+
+    // Count total products
+    const totalProductCount = await ProductModel.countDocuments();  // Corrected method name
+    console.log(totalProductCount, "Total products count");
+
+    // Calculate total number of pages
+    const totalPages = Math.ceil(totalProductCount / limitNumber);
+    console.log(totalPages, "total pages");
+
+    // Skip calculation based on page number and limit
+    const skipNumber = (pageNumber - 1) * limitNumber;
+
+    // Get products with pagination
+    const data = await ProductModel.find(query)
+      .limit(limitNumber)
+      .skip(skipNumber);
+
     return res.status(200).json({
       message: "All products data",
       data,
+      totalProductCount,
+      totalPages,
+      currentPage: pageNumber,
     });
   } catch (error) {
     console.log(error);
@@ -62,6 +94,7 @@ export const productsdata = async (req, res) => {
     });
   }
 };
+
 
 //? GET SINGLE PRODUCTS BY ID
 export const singleproductsdata = async (req, res) => {

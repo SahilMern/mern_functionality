@@ -6,7 +6,7 @@ import { productRegister, productsdata, singleproductsdata } from "../controller
 router.post("/productRegister", productRegister);
 
 //TODO:- GET Products Data
-router.get("/productsdata", productsdata);
+router.get("/", productsdata);
 
 //TODO:- GET Single Products Data
 router.get("/productsdata/:id", singleproductsdata);
