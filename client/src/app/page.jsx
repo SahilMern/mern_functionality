@@ -17,6 +17,7 @@ const Page = () => {
         );
         console.log(response.data, "data");
         setProductData(response.data.data); // Set the product data in state
+        setTotalPages(response.data.totalPages)
       } catch (error) {
         console.error("Error fetching products:", error);
       }
@@ -72,6 +73,13 @@ const Page = () => {
       {productData && (
         <div className=" border flex justify-center items-center">
           <button>prev</button>
+
+          {Array.from({ length: totalPages }, (_, index) => (
+             <button key={index} onClick={() => alert("hhii")}>
+             {index+1}
+            </button>
+          ))}
+      
 
           <button>Next</button>
         </div>
