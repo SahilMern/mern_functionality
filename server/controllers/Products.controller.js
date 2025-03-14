@@ -44,6 +44,26 @@ export const productRegister = async (req, res) => {
   }
 };
 
+//? GET SINGLE PRODUCTS BY ID
+export const singleproductsdata = async (req, res) => {
+  try {
+    const productId = req.params.id;
+    // console.log(productId, "productsId");
+
+    const data = await ProductModel.find({ _id: productId });
+    return res.status(200).json({
+      message: "All products data",
+      data,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "An error occurred",
+      error: error.message,
+    });
+  }
+};
+
 //? GET PRODUCT DATA
 export const productsdata = async (req, res) => {
   try {
@@ -64,7 +84,9 @@ export const productsdata = async (req, res) => {
     console.log(limitNumber, pageNumber, "datalimit");
 
     // Count total products
-    const totalProductCount = await ProductModel.countDocuments();  // Corrected method name
+    const totalProductCount = await ProductModel.countDocuments(query);  // Corrected method name
+
+    // const totalProductCount1 = await ProductModel.countDocuments(query);  // Corrected method name
     console.log(totalProductCount, "Total products count");
 
     // Calculate total number of pages
@@ -96,22 +118,4 @@ export const productsdata = async (req, res) => {
 };
 
 
-//? GET SINGLE PRODUCTS BY ID
-export const singleproductsdata = async (req, res) => {
-  try {
-    const productId = req.params.id;
-    // console.log(productId, "productsId");
 
-    const data = await ProductModel.find({ _id: productId });
-    return res.status(200).json({
-      message: "All products data",
-      data,
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({
-      message: "An error occurred",
-      error: error.message,
-    });
-  }
-};
